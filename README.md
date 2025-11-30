@@ -9,7 +9,6 @@
 
 Unlike other tools that upload your photos to a server, **Smart Image Compressor** processes everything inside your browser. Your images never leave your device.
 
----
 
 ## ✨ Features
 
