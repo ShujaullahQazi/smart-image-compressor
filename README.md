@@ -40,24 +40,24 @@ git clone [https://github.com/ShujaullahQazi/smart-image-compressor.git](https:/
 ---
 
 ### **Step 2: Navigate to the folder**
-Bash
+```bash
 
 cd smart-image-compressor
-
+```
 ---
 
 ### Step 3: Install dependencies
-Bash
+```bash
 
 npm install
-
+```
 ---
 
 ### Step 4: Start the App
-Bash
+```bash
 
 npm run dev
-
+```
 ---
 
 ### Step 5: Open in Browser
