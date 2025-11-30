@@ -99,9 +99,4 @@ Distributed under the MIT License. See `LICENSE` for more information.
 
 ---
 
-<p align="center">
-  Built with ❤️ by <a href="https://github.com/ShujaullahQazi">Shujaullah Qazi</a>
-</p>
-Distributed under the MIT License. See LICENSE for more information.
-
 <p align="center"> Built with ❤️ by <a href="https://www.google.com/search?q=https://github.com/ShujaullahQazi">Shujaullah Qazi</a> </p>
