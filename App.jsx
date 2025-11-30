@@ -159,10 +159,8 @@ const ImageCompressor = () => {
       <div className="min-h-screen bg-gradient-to-br from-blue-50 via-indigo-50 to-purple-50 flex items-center justify-center px-4">
         <div className="max-w-2xl w-full">
           <div className="text-center mb-8 pb-2">
-            <h1 className="text-4xl md:text-5xl font-bold mb-2 leading-normal">
-              <span className="text-blue-600">Image</span>{' '}
-              <span className="bg-gradient-to-r from-blue-600 to-purple-600 bg-clip-text text-transparent">Compressor</span>
-            </h1>
+            <h1 className="text-4xl md:text-5xl font-bold mb-2 bg-gradient-to-r from-blue-600 to-purple-600 bg-clip-text text-transparent leading-normal">
+              Image Compressor</h1>
             <p className="text-gray-600 text-lg">Upload or paste an image to get started</p>
           </div>
 
