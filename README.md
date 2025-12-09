@@ -35,7 +35,7 @@ Follow these steps to run the project on your machine.
 
 ### Step 1: Clone the repository
 ```bash
-git clone [https://github.com/ShujaullahQazi/smart-image-compressor.git](https://github.com/ShujaullahQazi/smart-image-compressor.git)
+git clone https://github.com/ShujaullahQazi/smart-image-compressor.git
 ```
 ---
 
