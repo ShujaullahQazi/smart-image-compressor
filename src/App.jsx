@@ -31,7 +31,8 @@ const App = () => {
   }
 
   return (
-    <>
+    <div className="h-screen bg-gray-900 flex flex-col overflow-hidden">
+
       <ImageEditor
         originalImage={originalImage}
         originalImageUrl={originalImageUrl}
@@ -47,7 +48,7 @@ const App = () => {
         compressedImageUrl={compressedImageUrl}
         originalSize={originalImage.size}
       />
-    </>
+    </div>
   );
 };
 

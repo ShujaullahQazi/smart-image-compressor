@@ -9,7 +9,7 @@ const ImageEditor = ({
     onReset
 }) => {
     return (
-        <div className="h-screen bg-gray-900 flex flex-col overflow-hidden">
+        <div className="flex-1 flex flex-col overflow-hidden relative">
             {/* Top Bar */}
             <div className="flex items-center justify-between p-4 bg-gray-800 border-b border-gray-700">
                 <button onClick={onReset} className="w-10 h-10 rounded-full bg-gray-700 hover:bg-gray-600 flex items-center justify-center text-white">
