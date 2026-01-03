@@ -1,6 +1,6 @@
 import { useState, useEffect, useRef } from 'react';
 import imageCompression from 'browser-image-compression';
-import { calculateCompressionOptions } from '../utils/compression'; // Import helper
+import { calculateCompressionOptions } from '../utils/compression';
 
 export const useImageCompression = () => {
     const [originalImage, setOriginalImage] = useState(null);
@@ -19,15 +19,13 @@ export const useImageCompression = () => {
         };
     }, [originalImageUrl, compressedImageUrl]);
 
-    const compress = async (file, qualityValue) => {
+    const compress = async (file, targetKB) => {
         if (!file) return;
 
         setIsCompressing(true);
 
         try {
-            // cleaner! logic is delegated to the utility function
-            const options = calculateCompressionOptions(file, qualityValue);
-
+            const options = calculateCompressionOptions(file, targetKB);
             const compressedFile = await imageCompression(file, options);
             setCompressedImage(compressedFile);
             setCompressedImageUrl(URL.createObjectURL(compressedFile));
@@ -37,7 +35,6 @@ export const useImageCompression = () => {
             setIsCompressing(false);
         }
     };
-
 
     const handleTargetSizeChange = (newTargetSize) => {
         setTargetSizeKB(newTargetSize);
@@ -76,7 +73,6 @@ export const useImageCompression = () => {
         initializeImage,
         setTargetSizeKB,
         handleTargetSizeChange,
-        compress,
         reset,
     };
 };

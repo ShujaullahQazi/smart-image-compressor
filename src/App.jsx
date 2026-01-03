@@ -1,4 +1,3 @@
-import React from 'react';
 import { useImageCompression } from './hooks/useImageCompression';
 import DropZone from './components/DropZone';
 import ImageEditor from './components/ImageEditor';
@@ -13,7 +12,6 @@ const App = () => {
     isCompressing,
     targetSizeKB,
     initializeImage,
-    setTargetSizeKB,
     handleTargetSizeChange,
     reset
   } = useImageCompression();

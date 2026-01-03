@@ -1,4 +1,4 @@
-import React, { useState, useRef, useEffect } from 'react';
+import { useState, useRef, useEffect } from 'react';
 
 const DropZone = ({ onFileSelect }) => {
     const [isDragging, setIsDragging] = useState(false);
@@ -44,7 +44,7 @@ const DropZone = ({ onFileSelect }) => {
     useEffect(() => {
         window.addEventListener('paste', handlePaste);
         return () => window.removeEventListener('paste', handlePaste);
-    }, []);
+    }, [handlePaste]);
 
     return (
         <div className="min-h-screen bg-gradient-to-br from-blue-50 via-indigo-50 to-purple-50 flex items-center justify-center px-4">
