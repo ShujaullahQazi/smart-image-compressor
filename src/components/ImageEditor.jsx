@@ -1,4 +1,5 @@
 import React from 'react';
+import { formatFileSize } from '../utils/formatters';
 
 const ImageEditor = ({
     originalImage,
@@ -27,7 +28,7 @@ const ImageEditor = ({
                     <div className="relative">
                         <img src={originalImageUrl} alt="Original" className="max-h-[calc(100vh-200px)] rounded-lg shadow-xl" />
                         <div className="absolute bottom-2 left-2 bg-black/70 text-white px-2 py-1 rounded text-sm">
-                            {(originalImage?.size / 1024).toFixed(2)} KB
+                            {originalImage && formatFileSize(originalImage.size)}
                         </div>
                     </div>
                 </div>
@@ -41,7 +42,7 @@ const ImageEditor = ({
                         <div className="relative">
                             <img src={compressedImageUrl} alt="Compressed" className="max-h-[calc(100vh-200px)] rounded-lg shadow-xl" />
                             <div className="absolute bottom-2 left-2 bg-black/70 text-white px-2 py-1 rounded text-sm">
-                                {(compressedImage?.size / 1024).toFixed(2)} KB
+                                {compressedImage && formatFileSize(compressedImage.size)}
                             </div>
                             {isCompressing && (
                                 <div className="absolute inset-0 bg-black/50 flex items-center justify-center text-white">

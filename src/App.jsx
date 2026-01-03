@@ -1,4 +1,4 @@
-import React, { useEffect } from 'react';
+import React from 'react';
 import { useImageCompression } from './hooks/useImageCompression';
 import DropZone from './components/DropZone';
 import ImageEditor from './components/ImageEditor';
@@ -11,20 +11,14 @@ const App = () => {
     compressedImage,
     compressedImageUrl,
     isCompressing,
-    quality,
-    setOriginalImage,
-    setOriginalImageUrl,
-    handleQualityChange,
-    compress,
+    targetSizeKB,
+    initializeImage,
+    setTargetSizeKB,
+    handleTargetSizeChange,
     reset
   } = useImageCompression();
 
-  // Initial compression when a file is selected
-  const handleFileSelect = (file) => {
-    setOriginalImage(file);
-    setOriginalImageUrl(URL.createObjectURL(file));
-    compress(file, quality);
-  };
+  const handleFileSelect = (file) => initializeImage(file);
 
   if (!originalImage) {
     return <DropZone onFileSelect={handleFileSelect} />;
@@ -32,7 +26,6 @@ const App = () => {
 
   return (
     <div className="h-screen bg-gray-900 flex flex-col overflow-hidden">
-
       <ImageEditor
         originalImage={originalImage}
         originalImageUrl={originalImageUrl}
@@ -42,8 +35,8 @@ const App = () => {
         onReset={reset}
       />
       <Controls
-        quality={quality}
-        onQualityChange={handleQualityChange}
+        targetSizeKB={targetSizeKB}
+        onTargetSizeChange={handleTargetSizeChange}
         compressedImage={compressedImage}
         compressedImageUrl={compressedImageUrl}
         originalSize={originalImage.size}

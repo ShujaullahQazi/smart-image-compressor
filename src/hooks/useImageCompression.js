@@ -1,5 +1,6 @@
 import { useState, useEffect, useRef } from 'react';
 import imageCompression from 'browser-image-compression';
+import { calculateCompressionOptions } from '../utils/compression'; // Import helper
 
 export const useImageCompression = () => {
     const [originalImage, setOriginalImage] = useState(null);
@@ -7,11 +8,10 @@ export const useImageCompression = () => {
     const [compressedImage, setCompressedImage] = useState(null);
     const [compressedImageUrl, setCompressedImageUrl] = useState(null);
     const [isCompressing, setIsCompressing] = useState(false);
-    const [quality, setQuality] = useState(80);
+    const [targetSizeKB, setTargetSizeKB] = useState(100);
 
     const compressionTimeoutRef = useRef(null);
 
-    // Clean up URLs when they change or component unmounts
     useEffect(() => {
         return () => {
             if (originalImageUrl) URL.revokeObjectURL(originalImageUrl);
@@ -24,22 +24,10 @@ export const useImageCompression = () => {
 
         setIsCompressing(true);
 
-        // Logic extracted from your original App.jsx
-        const initialQuality = 0.1 + (qualityValue / 100) * 0.9;
-        const estimatedOriginalSizeMB = file.size / (1024 * 1024);
-        const sizeRatio = 0.01 + (qualityValue / 100) * 0.99;
-        const maxSizeMB = estimatedOriginalSizeMB * sizeRatio;
-
-        const maxDimension = qualityValue < 30 ? 1280 : qualityValue < 60 ? 1600 : 1920;
-
-        const options = {
-            maxSizeMB: Math.max(0.01, maxSizeMB),
-            maxWidthOrHeight: maxDimension,
-            useWebWorker: true,
-            initialQuality: initialQuality,
-        };
-
         try {
+            // cleaner! logic is delegated to the utility function
+            const options = calculateCompressionOptions(file, qualityValue);
+
             const compressedFile = await imageCompression(file, options);
             setCompressedImage(compressedFile);
             setCompressedImageUrl(URL.createObjectURL(compressedFile));
@@ -50,17 +38,23 @@ export const useImageCompression = () => {
         }
     };
 
-    const handleQualityChange = (newQuality) => {
-        const clampedQuality = Math.max(0, Math.min(100, newQuality));
-        setQuality(clampedQuality);
+
+    const handleTargetSizeChange = (newTargetSize) => {
+        setTargetSizeKB(newTargetSize);
 
         if (compressionTimeoutRef.current) clearTimeout(compressionTimeoutRef.current);
 
         if (originalImage) {
             compressionTimeoutRef.current = setTimeout(() => {
-                compress(originalImage, clampedQuality);
+                compress(originalImage, newTargetSize);
             }, 300);
         }
+    };
+
+    const initializeImage = (file) => {
+        setOriginalImage(file);
+        setOriginalImageUrl(URL.createObjectURL(file));
+        compress(file, targetSizeKB);
     };
 
     const reset = () => {
@@ -68,7 +62,7 @@ export const useImageCompression = () => {
         setOriginalImageUrl(null);
         setCompressedImage(null);
         setCompressedImageUrl(null);
-        setQuality(80);
+        setTargetSizeKB(100);
         setIsCompressing(false);
     };
 
@@ -78,10 +72,10 @@ export const useImageCompression = () => {
         compressedImage,
         compressedImageUrl,
         isCompressing,
-        quality,
-        setOriginalImage,
-        setOriginalImageUrl,
-        handleQualityChange,
+        targetSizeKB,
+        initializeImage,
+        setTargetSizeKB,
+        handleTargetSizeChange,
         compress,
         reset,
     };
