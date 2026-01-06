@@ -2,6 +2,8 @@ import { useImageCompression } from './hooks/useImageCompression';
 import DropZone from './components/DropZone';
 import ImageEditor from './components/ImageEditor';
 import Controls from './components/Controls';
+import ErrorNotification from './components/ErrorNotification';
+import { useState } from 'react';
 
 const App = () => {
   const {
@@ -11,15 +13,44 @@ const App = () => {
     compressedImageUrl,
     isCompressing,
     targetSizeKB,
+    error: compressionError,
     initializeImage,
     handleTargetSizeChange,
-    reset
+    reset,
+    clearError: clearCompressionError
   } = useImageCompression();
 
-  const handleFileSelect = (file) => initializeImage(file);
+  const [dropZoneError, setDropZoneError] = useState(null);
+
+  // Unified error handler
+  const currentError = compressionError || dropZoneError;
+  const clearCurrentError = () => {
+    clearCompressionError();
+    setDropZoneError(null);
+  };
+
+  const handleFileSelect = (file) => {
+    setDropZoneError(null); // Clear any previous errors
+    initializeImage(file);
+  };
+
+  const handleError = (errorMessage) => {
+    setDropZoneError(errorMessage);
+  };
 
   if (!originalImage) {
-    return <DropZone onFileSelect={handleFileSelect} />;
+    return (
+      <>
+        <DropZone
+          onFileSelect={handleFileSelect}
+          onError={handleError}
+        />
+        <ErrorNotification
+          error={currentError}
+          onClose={clearCurrentError}
+        />
+      </>
+    );
   }
 
   return (
@@ -31,6 +62,7 @@ const App = () => {
         compressedImageUrl={compressedImageUrl}
         isCompressing={isCompressing}
         onReset={reset}
+        onError={handleError}
       />
       <Controls
         targetSizeKB={targetSizeKB}
@@ -38,6 +70,11 @@ const App = () => {
         compressedImage={compressedImage}
         compressedImageUrl={compressedImageUrl}
         originalSize={originalImage.size}
+        originalFileName={originalImage.name}
+      />
+      <ErrorNotification
+        error={currentError}
+        onClose={clearCurrentError}
       />
     </div>
   );

@@ -1,6 +1,6 @@
-import { useState, useRef, useEffect } from 'react';
+import { useState, useRef, useEffect, useCallback } from 'react';
 
-const DropZone = ({ onFileSelect }) => {
+const DropZone = ({ onFileSelect, onError }) => {
     const [isDragging, setIsDragging] = useState(false);
     const fileInputRef = useRef(null);
 
@@ -21,7 +21,31 @@ const DropZone = ({ onFileSelect }) => {
         validateAndSelect(file);
     };
 
-    const handlePaste = (e) => {
+    const validateAndSelect = useCallback((file) => {
+        if (!file) {
+            onError?.('No file selected. Please choose a valid image file.');
+            return;
+        }
+
+        if (!file.type.startsWith('image/')) {
+            onError?.('Invalid file type. Please select an image file (PNG, JPG, WEBP, etc.).');
+            return;
+        }
+
+        if (file.size > 10 * 1024 * 1024) {
+            onError?.('File too large. Maximum size is 10MB. Please choose a smaller image.');
+            return;
+        }
+
+        if (file.size === 0) {
+            onError?.('The selected file is empty. Please choose a valid image.');
+            return;
+        }
+
+        onFileSelect(file);
+    }, [onFileSelect, onError]);
+
+    const handlePaste = useCallback((e) => {
         const items = e.clipboardData?.items;
         if (!items) return;
         for (let i = 0; i < items.length; i++) {
@@ -33,13 +57,7 @@ const DropZone = ({ onFileSelect }) => {
                 break;
             }
         }
-    };
-
-    const validateAndSelect = (file) => {
-        if (file && file.type.startsWith('image/')) {
-            onFileSelect(file);
-        }
-    };
+    }, [validateAndSelect]);
 
     useEffect(() => {
         window.addEventListener('paste', handlePaste);

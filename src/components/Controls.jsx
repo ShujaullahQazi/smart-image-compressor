@@ -4,10 +4,14 @@ const Controls = ({
     onTargetSizeChange,
     compressedImage,
     compressedImageUrl,
-    originalSize
+    originalSize,
+    originalFileName
 }) => {
     // Convert original size to KB for display and slider limits
     const originalSizeKB = Math.round(originalSize / 1024);
+
+    // Get extension from original filename
+    const fileExtension = originalFileName?.split('.').pop()?.toLowerCase() || 'jpg';
 
     // Calculate current compression ratio
     const compressionRatio = compressedImage
@@ -65,7 +69,7 @@ const Controls = ({
                             </div>
                             <a
                                 href={compressedImageUrl}
-                                download={`compressed-${Math.round(targetSizeKB)}KB.jpg`}
+                                download={`compressed-${Math.round(targetSizeKB)}KB.${fileExtension}`}
                                 className="px-6 py-2 bg-blue-600 hover:bg-blue-700 text-white rounded-lg font-medium transition-colors"
                             >
                                 Download

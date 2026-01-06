@@ -9,11 +9,13 @@ export const useImageCompression = () => {
     const [compressedImageUrl, setCompressedImageUrl] = useState(null);
     const [isCompressing, setIsCompressing] = useState(false);
     const [targetSizeKB, setTargetSizeKB] = useState(100);
+    const [error, setError] = useState(null);
 
     const compressionTimeoutRef = useRef(null);
 
     useEffect(() => {
         return () => {
+            if (compressionTimeoutRef.current) clearTimeout(compressionTimeoutRef.current);
             if (originalImageUrl) URL.revokeObjectURL(originalImageUrl);
             if (compressedImageUrl) URL.revokeObjectURL(compressedImageUrl);
         };
@@ -23,14 +25,28 @@ export const useImageCompression = () => {
         if (!file) return;
 
         setIsCompressing(true);
+        setError(null); // Clear any previous errors
 
         try {
             const options = calculateCompressionOptions(file, targetKB);
             const compressedFile = await imageCompression(file, options);
             setCompressedImage(compressedFile);
             setCompressedImageUrl(URL.createObjectURL(compressedFile));
-        } catch (error) {
-            console.error('Error compressing:', error);
+        } catch (err) {
+            console.error('Error compressing:', err);
+            let errorMessage = 'Failed to compress image. ';
+
+            if (err.message?.includes('Not an image')) {
+                errorMessage += 'The file is not a valid image.';
+            } else if (err.message?.includes('Could not load image')) {
+                errorMessage += 'The image file appears to be corrupted.';
+            } else if (err.message?.includes('timeout')) {
+                errorMessage += 'Compression took too long. Try a smaller target size.';
+            } else {
+                errorMessage += err.message || 'Please try again.';
+            }
+
+            setError(errorMessage);
         } finally {
             setIsCompressing(false);
         }
@@ -61,6 +77,11 @@ export const useImageCompression = () => {
         setCompressedImageUrl(null);
         setTargetSizeKB(100);
         setIsCompressing(false);
+        setError(null);
+    };
+
+    const clearError = () => {
+        setError(null);
     };
 
     return {
@@ -70,9 +91,11 @@ export const useImageCompression = () => {
         compressedImageUrl,
         isCompressing,
         targetSizeKB,
+        error,
         initializeImage,
         setTargetSizeKB,
         handleTargetSizeChange,
         reset,
+        clearError,
     };
 };
