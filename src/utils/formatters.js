@@ -1,11 +1,3 @@
-// src/utils/formatters.js
-
-/**
- * Formats bytes into a readable string (KB or MB).
- * * @param {number} bytes - The size in bytes
- * @param {number} decimals - Number of decimal places (default 2)
- * @returns {string} - Formatted string (e.g., "1.50 MB")
- */
 export const formatFileSize = (bytes, decimals = 2) => {
     if (bytes === 0) return '0 Bytes';
 

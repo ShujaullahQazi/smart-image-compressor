@@ -67,7 +67,13 @@ export const useImageCompression = () => {
     const initializeImage = (file) => {
         setOriginalImage(file);
         setOriginalImageUrl(URL.createObjectURL(file));
-        compress(file, targetSizeKB);
+
+        // Calculate 80% of original image size as the default target
+        const originalSizeKB = Math.round(file.size / 1024);
+        const defaultTargetKB = Math.max(10, Math.round(originalSizeKB * 0.8)); // At least 10KB
+
+        setTargetSizeKB(defaultTargetKB);
+        compress(file, defaultTargetKB);
     };
 
     const reset = () => {
